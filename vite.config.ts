@@ -1,4 +1,3 @@
-/// <reference types="vitest" />
 import { VitePWA } from "vite-plugin-pwa";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
@@ -51,5 +50,4 @@ export default defineConfig({
       },
     }),
   ],
-  test: {},
 });
