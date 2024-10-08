@@ -1,26 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
+    "target": "ESNext",
     "lib": [
-      "ES2020",
       "DOM",
-      "DOM.Iterable"
+      "DOM.Iterable",
+      "ESNext"
     ],
     "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
     "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "noEmit": true,
     "strict": true,
+    "allowJs": false,
+    "skipLibCheck": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "noUnusedParameters": true,
+    "useDefineForClassFields": true,
+    "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
     "baseUrl": ".",
     "paths": {
       "@/*": [
@@ -32,7 +33,9 @@
     "vite/client",
     "vite-plugin-pwa/client"
   ],
-  "include": [],
+  "include": [
+    "src"
+  ],
   "files": [],
   "references": [
     {
