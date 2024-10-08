@@ -23,6 +23,10 @@
     "noEmit": true
   },
   "include": [],
+  "types": [
+    "vite/client",
+    "vite-plugin-pwa/client"
+  ],
   "references": [
     {
       "path": "./tsconfig.node.json"
