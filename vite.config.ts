@@ -1,21 +1,27 @@
-import path from "path";
-import { VitePWA } from "vite-plugin-pwa";
-import react from "@vitejs/plugin-react-swc";
-import { defineConfig } from "vite";
-import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
-import svgr from "vite-plugin-svgr";
-import tsconfigPaths from "vite-tsconfig-paths";
+import path from 'path';
+import { VitePWA } from 'vite-plugin-pwa';
+import react from '@vitejs/plugin-react-swc';
+import { defineConfig } from 'vite';
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import svgr from 'vite-plugin-svgr';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      '@app': path.resolve(__dirname, './src/app'),
+      '@assets': path.resolve(__dirname, './src/assets'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@hooks': path.resolve(__dirname, './src/hooks'),
+      '@store': path.resolve(__dirname, './src/store'),
+
+      '@': path.resolve(__dirname, './src'),
     },
   },
   build: {
     rollupOptions: {
-      external: ["sharp"],
+      external: ['sharp'],
     },
   },
   plugins: [
@@ -24,7 +30,7 @@ export default defineConfig({
     ViteImageOptimizer({}),
     svgr({
       svgrOptions: {
-        plugins: ["@svgr/plugin-svgo", "@svgr/plugin-jsx"],
+        plugins: ['@svgr/plugin-svgo', '@svgr/plugin-jsx'],
         svgoConfig: {
           floatPrecision: 2,
         },
@@ -32,7 +38,7 @@ export default defineConfig({
       },
     }),
     VitePWA({
-      registerType: "autoUpdate",
+      registerType: 'autoUpdate',
       injectRegister: false,
 
       pwaAssets: {
@@ -41,23 +47,23 @@ export default defineConfig({
       },
 
       manifest: {
-        name: "nexus-hub",
-        short_name: "nexus-hub",
-        description: "nexus-hub",
-        theme_color: "#ffffff",
+        name: 'nexus-hub',
+        short_name: 'nexus-hub',
+        description: 'nexus-hub',
+        theme_color: '#ffffff',
       },
 
       workbox: {
-        globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
+        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
       },
 
       devOptions: {
         enabled: false,
-        navigateFallback: "index.html",
+        navigateFallback: 'index.html',
         suppressWarnings: true,
-        type: "module",
+        type: 'module',
       },
     }),
   ],

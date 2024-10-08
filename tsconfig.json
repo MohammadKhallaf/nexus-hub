@@ -22,10 +22,28 @@
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@store/*": [
+        "src/store/*"
+      ],
+      "@styles/*": [
+        "src/shared/styles/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@hooks": [
+        "src/hooks"
+      ],
       "@/*": [
-        "./src/*"
+        "src/*"
       ]
     }
   },
@@ -36,7 +54,6 @@
   "include": [
     "src"
   ],
-  "files": [],
   "references": [
     {
       "path": "./tsconfig.node.json"

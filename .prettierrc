@@ -14,5 +14,8 @@
   "trailingComma": "es5",
   "arrowParens": "always",
   "quoteProps": "as-needed",
-  "htmlWhitespaceSensitivity": "css"
+  "htmlWhitespaceSensitivity": "css",
+  "plugins": [
+    "prettier-plugin-tailwindcss"
+  ]
 }

@@ -8,8 +8,26 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@store/*": [
+        "src/store/*"
+      ],
+      "@styles/*": [
+        "src/shared/styles/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@hooks": [
+        "src/hooks"
+      ],
       "@/*": [
-        "./src/*"
+        "src/*"
       ]
     }
   },
