@@ -6,7 +6,7 @@
   "requirePragma": false,
   "bracketSpacing": true,
   "jsxSingleQuote": false,
-  "jsxBracketSameLine": true,
+  "bracketSameLine": true,
   "tabWidth": 2,
   "printWidth": 100,
   "endOfLine": "lf",

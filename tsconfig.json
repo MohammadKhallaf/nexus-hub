@@ -52,7 +52,8 @@
     "vite-plugin-pwa/client"
   ],
   "include": [
-    "src"
+    "src",
+    ".storybook/**/*"
   ],
   "references": [
     {

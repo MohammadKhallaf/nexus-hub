@@ -13,9 +13,9 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "lint": "eslint . --ext ts,tsx,js,jsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
-    "format": "prettier-eslint --write \"src/**/*.{js,jsx,ts,tsx}\"",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --ignore-pattern eslint.config.js --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "type-check": "tsc --noEmit",
     "prepare": "husky || true"
   },
@@ -26,10 +26,7 @@
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "i": "^0.3.7",
     "lucide-react": "^0.451.0",
-    "npm": "^10.9.0",
-    "optional": "^0.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
@@ -99,11 +96,8 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{js,jsx,ts,tsx,css,md}": [
-      "prettier --write"
+      "pnpm lint:fix",
+      "pnpm format"
     ]
   },
   "pnpm": {

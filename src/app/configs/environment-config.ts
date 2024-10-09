@@ -1,6 +1,9 @@
-const envConfigKeys = {
-  enable_rhf: import.meta.env.VITE_RHF_DEV ? JSON.parse(import.meta.env.VITE_RHF_DEV) : false, // react hook form dev tool
-};
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+const envConfigKeys: Record<string, boolean | string | undefined> = {
+  enable_rhf: import.meta.env.VITE_RHF_DEV
+    ? (JSON.parse(import.meta.env.VITE_RHF_DEV) as boolean)
+    : false, // react hook form dev tool
+} as const;
 
 Object.entries(envConfigKeys).forEach(([key, val]) => {
   if (!val && typeof val !== 'boolean') {

@@ -1,5 +1,5 @@
-import App from '@/app.page';
 import { createBrowserRouter, type RouterProviderProps } from 'react-router-dom';
+import App from '@/app.page';
 
 const router: RouterProviderProps['router'] = createBrowserRouter([
   {

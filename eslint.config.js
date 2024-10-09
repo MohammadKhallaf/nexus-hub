@@ -1,21 +1,23 @@
+import importPlugin from 'eslint-plugin-import'; // Import the import plugin
 import js from '@eslint/js';
 import globals from 'globals';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
+import prettier from 'eslint-plugin-prettier'; // Import Prettier plugin
 
 export default tseslint.config(
   { ignores: ['dist/**', 'node_modules/**', '.eslintrc.cjs'] },
   {
     extends: [
       js.configs.recommended,
-      ...react.configs.flat.recommended,
-      ...react.configs.flat['jsx-runtime'],
+      react.configs.flat.recommended,
+
       ...tseslint.configs.recommendedTypeChecked,
       ...tseslint.configs.stylisticTypeChecked,
     ],
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       parser: tseslint.parser,
@@ -24,15 +26,17 @@ export default tseslint.config(
         ...globals.es2020,
       },
       parserOptions: {
-        project: './tsconfig.json',
+        project: './tsconfig.eslint.json',
       },
     },
 
     plugins: {
       '@typescript-eslint': tseslint.plugin,
-      react: react,
+      react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      import: importPlugin,
+      prettier,
     },
     settings: {
       react: {
@@ -40,6 +44,7 @@ export default tseslint.config(
       },
     },
     rules: {
+      ...react.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
       'no-console': 'warn',
       'react/jsx-key': 'warn',
