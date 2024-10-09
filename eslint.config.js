@@ -8,7 +8,7 @@ import tseslint from 'typescript-eslint';
 import prettier from 'eslint-plugin-prettier'; // Import Prettier plugin
 
 export default tseslint.config(
-  { ignores: ['dist/**', 'node_modules/**', '.eslintrc.cjs'] },
+  { ignores: ['dist/**', 'node_modules/**', '.eslint.config.js'] },
   {
     extends: [
       js.configs.recommended,
