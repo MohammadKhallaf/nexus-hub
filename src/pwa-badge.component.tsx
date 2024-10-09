@@ -1,4 +1,4 @@
-import './PWABadge.css';
+import './pwa-badge.css';
 
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
@@ -44,7 +44,11 @@ function PWABadge() {
           </div>
           <div className="PWABadge-buttons">
             {needRefresh && (
-              <button className="PWABadge-toast-button" onClick={() => updateServiceWorker(true)}>
+              <button
+                className="PWABadge-toast-button"
+                onClick={() => {
+                  updateServiceWorker(true).catch((e) => console.error(e));
+                }}>
                 Reload
               </button>
             )}
@@ -66,6 +70,7 @@ export default PWABadge;
 function registerPeriodicSync(period: number, swUrl: string, r: ServiceWorkerRegistration) {
   if (period <= 0) return;
 
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   setInterval(async () => {
     if ('onLine' in navigator && !navigator.onLine) return;
 

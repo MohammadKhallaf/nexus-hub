@@ -20,7 +20,7 @@ function App() {
       <h1>nexus-hub</h1>
       <div className="card">
         <button type="button" onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+          count is {count} X
         </button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
