@@ -17,8 +17,7 @@
     "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "type-check": "tsc --noEmit",
-    "prepare": "husky || true",
-    "chromatic": "pnpm dlx chromatic"
+    "prepare": "husky || true"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
@@ -45,7 +44,6 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "1.9.0",
     "@eslint/js": "^9.11.1",
     "@hookform/devtools": "^4.3.1",
     "@img/sharp-win32-x64": "^0.33.5",
@@ -71,7 +69,6 @@
     "@vitejs/plugin-react": "^4.2.1",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
-    "chromatic": "^11.12.5",
     "eslint": "^9.12.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
