@@ -4,23 +4,23 @@ import globals from 'globals';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
-import tseslint from 'typescript-eslint';
+import tsEslint from 'typescript-eslint';
 import prettier from 'eslint-plugin-prettier'; // Import Prettier plugin
 
-export default tseslint.config(
+export default tsEslint.config(
   { ignores: ['dist/**', 'node_modules/**', '.eslint.config.js'] },
   {
     extends: [
       js.configs.recommended,
       react.configs.flat.recommended,
 
-      ...tseslint.configs.recommendedTypeChecked,
-      ...tseslint.configs.stylisticTypeChecked,
+      ...tsEslint.configs.recommendedTypeChecked,
+      ...tsEslint.configs.stylisticTypeChecked,
     ],
     files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
-      parser: tseslint.parser,
+      parser: tsEslint.parser,
       globals: {
         ...globals.browser,
         ...globals.es2020,
@@ -31,7 +31,7 @@ export default tseslint.config(
     },
 
     plugins: {
-      '@typescript-eslint': tseslint.plugin,
+      '@typescript-eslint': tsEslint.plugin,
       react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
@@ -39,6 +39,9 @@ export default tseslint.config(
       prettier,
     },
     settings: {
+      'import/resolver': {
+        typescript: {},
+      },
       react: {
         version: 'detect',
       },
