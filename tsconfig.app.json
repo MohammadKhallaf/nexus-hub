@@ -8,6 +8,9 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
+      "@types": [
+        "src/app/types"
+      ],
       "@app/*": [
         "src/app/*"
       ],

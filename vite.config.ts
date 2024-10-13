@@ -1,8 +1,8 @@
 import path from 'path';
-import { VitePWA } from 'vite-plugin-pwa';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import { VitePWA } from 'vite-plugin-pwa';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
@@ -10,6 +10,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   resolve: {
     alias: {
+      '@types': path.resolve(__dirname, './src/app/types'),
       '@app': path.resolve(__dirname, './src/app'),
       '@assets': path.resolve(__dirname, './src/assets'),
       '@components': path.resolve(__dirname, './src/components'),
