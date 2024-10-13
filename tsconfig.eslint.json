@@ -1,7 +1,8 @@
 {
   "extends": "./tsconfig.json", // extend your existing TSConfig
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "vite.config.ts"
   ], // include all relevant files
   "exclude": [
     "node_modules",
