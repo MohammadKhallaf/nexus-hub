@@ -24,6 +24,9 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./",
     "paths": {
+      "@schemas": [
+        "src/app/schemas"
+      ],
       "@types": [
         "src/app/types"
       ],

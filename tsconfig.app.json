@@ -8,6 +8,9 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
+      "@schemas": [
+        "src/app/schemas"
+      ],
       "@types": [
         "src/app/types"
       ],
