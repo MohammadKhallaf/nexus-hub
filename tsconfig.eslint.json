@@ -2,11 +2,11 @@
   "extends": "./tsconfig.json", // extend your existing TSConfig
   "include": [
     "src/**/*",
-    "vite.config.ts",
-    ".eslint.config.js",
+    "vite.config.ts"
   ], // include all relevant files
   "exclude": [
     "node_modules",
     "dist",
+    ".eslint.config.js",
   ] // exclude directories as needed
 }
