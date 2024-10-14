@@ -17,7 +17,6 @@ export default tsEslint.config(
 
       ...tsEslint.configs.recommendedTypeChecked,
       ...tsEslint.configs.stylisticTypeChecked,
-      tanstackQuery.configs.recommended,
     ],
     files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
@@ -52,6 +51,8 @@ export default tsEslint.config(
     rules: {
       ...react.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
+      ...tanstackQuery.configs.recommended.rules,
+
       'no-console': 'warn',
       'react/jsx-key': 'warn',
       'no-unused-vars': 'warn',
