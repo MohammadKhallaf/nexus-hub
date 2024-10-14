@@ -1,18 +1,37 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-import { createSlice, type Slice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, type Slice } from '@reduxjs/toolkit';
+import { getLocalStorageItem } from '@app/utils/get-local-storage';
+import { IUser } from '@types';
 
-export const authSlice: Slice<any> = createSlice({
+interface IAuth {
+  user: IUser;
+  token: string;
+}
+
+const initialState: IAuth | null = (() => {
+  const user = getLocalStorageItem<IUser>('user');
+  const token = getLocalStorageItem<string>('token');
+
+  return user && token ? { user, token } : null;
+})();
+
+export const authSlice: Slice<IAuth | null> = createSlice({
   name: 'auth',
-  initialState: {},
+  initialState,
   reducers: {
-    setAuth: (state, action) => {
-      return {
-        ...state,
-        ...action.payload,
-      };
+    setAuth: (state, action: PayloadAction<Partial<IAuth>>) => {
+      if (state === null) {
+        localStorage.setItem('user', JSON.stringify(action.payload.user));
+        localStorage.setItem('token', action.payload.token!);
+        return action.payload as IAuth;
+      }
+      localStorage.setItem('user', JSON.stringify({ ...state.user, ...action.payload.user }));
+      localStorage.setItem('token', action.payload.token!);
+      return { ...state, ...action.payload };
     },
     clearAuth: () => {
-      return {};
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      return null;
     },
   },
 });

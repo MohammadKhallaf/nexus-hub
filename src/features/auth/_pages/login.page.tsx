@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { setAuth } from '@actions';
 import EROUTES from '@app/constants/routes';
 import type { TFormSubmitHandler } from '@app/types/global.types';
 import {
@@ -18,6 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
+import { useAppDispatch } from '@hooks';
 import { userLoginSchema } from '@schemas';
 import type { TLoginForm } from '@types';
 import AuthLayout from '../_components/auth.layout';
@@ -36,11 +38,23 @@ const ButtonWithMotion = motion.create(Button);
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [shake, setShake] = useState(false);
 
   const { isPending, mutate } = useLogin({
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success('Logged in successfully!');
+      dispatch(
+        setAuth({
+          user: {
+            email: data.user.email,
+            firstName: data.user.user_metadata.first_name as string,
+            lastName: data.user.user_metadata.lastName as string,
+            avatarUtl: data.user.user_metadata.avatar_url as string,
+          },
+          token: data.session?.access_token,
+        })
+      );
       setTimeout(() => {
         form.reset();
         navigate(EROUTES.HOME);

@@ -18,6 +18,14 @@ export interface TLoginResult {
   session: Session;
 }
 
+export interface IUser {
+  id: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  avatarUtl?: string;
+}
+
 export interface TProfileRow {
   id: string;
   avatar_url?: string;
