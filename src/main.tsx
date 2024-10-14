@@ -6,6 +6,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import { RouterProvider } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import router from '@app/router';
+import { Provider } from 'react-redux';
+import store from './store';
 
 import './index.css';
 
@@ -18,11 +20,13 @@ const queryClient = new QueryClient();
 root.render(
   <StrictMode>
     <HelmetProvider context={helmetContext}>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-      <Toaster richColors />
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <Toaster richColors />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </Provider>
     </HelmetProvider>
   </StrictMode>
 );

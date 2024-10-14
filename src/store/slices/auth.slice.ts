@@ -21,7 +21,7 @@ export const authSlice: Slice<IAuth | null> = createSlice({
     setAuth: (state, action: PayloadAction<Partial<IAuth>>) => {
       if (state === null) {
         localStorage.setItem('user', JSON.stringify(action.payload.user));
-        localStorage.setItem('token', action.payload.token!);
+        localStorage.setItem('token', JSON.stringify(action.payload.token));
         return action.payload as IAuth;
       }
       localStorage.setItem('user', JSON.stringify({ ...state.user, ...action.payload.user }));

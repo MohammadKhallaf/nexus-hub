@@ -1,14 +1,9 @@
-import { redirect } from 'react-router-dom';
-import EROUTES from '@app/constants/routes';
-import supabase from '@app/configs/supabase';
+import isAuth from '@app/utils/check-auth';
 
-async function authLoader() {
-  // Check if the user is authenticated
-  const isAuthenticated = await supabase.auth.getSession();
-
-  if (!isAuthenticated) return redirect(EROUTES.LOGIN);
-
-  return { isAuthenticated };
+function authLoader() {
+  return {
+    isAuthenticated: isAuth(),
+  };
 }
 
 export default authLoader;
