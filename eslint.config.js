@@ -1,3 +1,4 @@
+import tanstackQuery from '@tanstack/eslint-plugin-query';
 import importPlugin from 'eslint-plugin-import'; // Import the import plugin
 import js from '@eslint/js';
 import globals from 'globals';
@@ -16,6 +17,7 @@ export default tsEslint.config(
 
       ...tsEslint.configs.recommendedTypeChecked,
       ...tsEslint.configs.stylisticTypeChecked,
+      'plugin:@tanstack/query/recommended',
     ],
     files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
@@ -37,6 +39,7 @@ export default tsEslint.config(
       'react-refresh': reactRefresh,
       import: importPlugin,
       prettier,
+      '@tanstack/query': tanstackQuery,
     },
     settings: {
       'import/resolver': {
