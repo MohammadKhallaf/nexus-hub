@@ -1,12 +1,12 @@
-import { clearAuth } from '@actions';
-import store from '@store/index';
 import * as jose from 'jose';
 import { DateTime } from 'luxon';
+import { logout } from '@/features/auth/_services/logout.service';
+import store from '@store/index';
 
-function isAuthenticated() {
+async function isAuthenticated() {
   const authState = store.getState().auth;
 
-  if (!authState || !authState.token) return false;
+  if (!authState?.token) return false;
 
   try {
     const { exp } = jose.decodeJwt(localStorage.getItem('token')!);
@@ -19,7 +19,7 @@ function isAuthenticated() {
 
     return true;
   } catch (_error) {
-    store.dispatch(clearAuth(''));
+    await logout();
     return false;
   }
 }

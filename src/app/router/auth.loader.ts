@@ -1,8 +1,8 @@
 import isAuth from '@app/utils/check-auth';
 
-function authLoader() {
+async function authLoader() {
   return {
-    isAuthenticated: isAuth(),
+    isAuthenticated: await isAuth(),
   };
 }
 
