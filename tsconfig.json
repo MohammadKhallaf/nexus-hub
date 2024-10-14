@@ -24,8 +24,20 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./",
     "paths": {
+      "@schemas": [
+        "src/app/schemas"
+      ],
+      "@types": [
+        "src/app/types"
+      ],
+      "@hooks": [
+        "src/app/hooks"
+      ],
       "@app/*": [
         "src/app/*"
+      ],
+      "@actions": [
+        "src/store/actions"
       ],
       "@store/*": [
         "src/store/*"
@@ -38,9 +50,6 @@
       ],
       "@assets/*": [
         "src/assets/*"
-      ],
-      "@hooks": [
-        "src/hooks"
       ],
       "@/*": [
         "src/*"

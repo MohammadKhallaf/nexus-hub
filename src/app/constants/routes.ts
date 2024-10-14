@@ -1,7 +1,7 @@
 enum EROUTES {
   LOGIN = '/login',
   REGISTER = '/register',
-  HOME = 'app',
+  HOME = '/',
 }
 
 export default EROUTES;

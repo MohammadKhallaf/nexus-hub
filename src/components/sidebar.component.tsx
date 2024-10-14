@@ -5,8 +5,17 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { BellIcon } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { logout } from '@/features/auth/_services';
 
 const Sidebar = () => {
   return (
@@ -28,9 +37,26 @@ const Sidebar = () => {
         <Cog6ToothIcon className="h-6 w-6" />
       </Button>
       <div className="flex-grow" />
-      <Button variant="ghost" size="icon" className="text-white">
-        <UserCircleIcon className="h-6 w-6" />
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="border-none text-white">
+            <UserCircleIcon className="h-6 w-6" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => {
+              logout().catch(console.error);
+            }}>
+            Logout
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
