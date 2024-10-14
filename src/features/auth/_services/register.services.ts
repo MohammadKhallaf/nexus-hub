@@ -1,13 +1,7 @@
 import supabase from '@app/configs/supabase';
+import type { TRegisterFormData } from '@types';
 
-interface IRegisterForm {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-}
-
-export default async (body: IRegisterForm) => {
+export const register = async (body: TRegisterFormData) => {
   const { error, data } = await supabase.auth.signUp({
     email: body.email,
     password: body.password,
