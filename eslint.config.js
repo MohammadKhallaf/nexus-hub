@@ -17,7 +17,7 @@ export default tsEslint.config(
 
       ...tsEslint.configs.recommendedTypeChecked,
       ...tsEslint.configs.stylisticTypeChecked,
-      'plugin:@tanstack/query/recommended',
+      tanstackQuery.configs.recommended,
     ],
     files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
