@@ -1,19 +1,57 @@
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
+import ImageResize from 'tiptap-extension-resize-image';
+// Import React FilePond
+import { FilePond, registerPlugin } from 'react-filepond';
+
+// Import FilePond styles
+
+import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
+import FilePondPluginImageValidateSize from 'filepond-plugin-image-validate-size';
+
+import FilePondPluginFileRename from 'filepond-plugin-file-rename';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+
+// Register the plugins
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { TablePlugin } from '@lexical/react/LexicalTablePlugin';
 import { INSERT_TABLE_COMMAND, TableCellNode, TableNode, TableRowNode } from '@lexical/table';
+import { MantineProvider } from '@mantine/core';
+import { Link, RichTextEditor } from '@mantine/tiptap';
+import CharacterCount from '@tiptap/extension-character-count';
+import Dropcursor from '@tiptap/extension-dropcursor';
+import Highlight from '@tiptap/extension-highlight';
+import TiptapImage from '@tiptap/extension-image';
+import Placeholder from '@tiptap/extension-placeholder';
+import SubScript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
+import TextAlign from '@tiptap/extension-text-align';
+import Underline from '@tiptap/extension-underline';
+import { BubbleMenu, Editor, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 import { $getRoot, $getSelection, LexicalEditor, type EditorThemeClasses } from 'lexical';
-import { MicIcon, MoreVerticalIcon, PhoneIcon, SmileIcon, VideoIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { ImageIcon, MoreVerticalIcon, PhoneIcon, VideoIcon } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import ToolbarPlugin from './input-editor/_plugins/toolbar-plugin';
+import InsertTableDialog from './input-editor/_plugins/insert-table-dialog';
+
+import '@mantine/core/styles.css';
+import '@mantine/tiptap/styles.css';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import 'filepond/dist/filepond.min.css';
+
+registerPlugin(
+  FilePondPluginFileRename,
+  FilePondPluginImageExifOrientation,
+  FilePondPluginImagePreview,
+  FilePondPluginImageValidateSize
+);
 
 const theme: EditorThemeClasses = {
   ltr: 'ltr',
@@ -113,10 +151,114 @@ function MyOnChangePlugin({ onChange }: { onChange: (editorState: any) => void }
   }, [editor, onChange]);
   return null;
 }
+
+const ImageControl = ({ editor }: { editor: Editor | null }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+  const [files, setFiles] = useState([]);
+
+  const insertImage = useCallback(() => {
+    const imageUrl = URL.createObjectURL(files[0].file);
+    console.log(imageUrl);
+    if (editor && files.length) {
+      editor.chain().focus().setImage({ src: imageUrl }).run();
+      setImageUrl('');
+      setIsOpen(false);
+    }
+  }, [editor, files]);
+
+  if (!editor) {
+    return null;
+  }
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
+          <ImageIcon className="h-4 w-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <FilePond
+          files={files}
+          onupdatefiles={setFiles}
+          allowMultiple={false}
+          maxFiles={1}
+          server={false}
+        />
+        <div className="space-y-4 p-4">
+          <div className="space-y-2">
+            <Label htmlFor="image-url">Image URL</Label>
+            <Input
+              id="image-url"
+              type="url"
+              placeholder="https://example.com/image.jpg"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+            />
+          </div>
+          <div className="flex justify-end space-x-2">
+            <Button variant="outline" onClick={() => setIsOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={insertImage}>Insert Image</Button>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
 const ChatArea = () => {
   const [editorState, setEditorState] = useState('');
   const [showTable, setShowTable] = useState<boolean>(false);
+  const editor = useEditor({
+    autofocus: true,
+    extensions: [
+      StarterKit,
+      Underline,
+      Link,
+      Superscript,
+      SubScript,
+      Highlight,
+      Dropcursor,
+      CharacterCount.configure({
+        limit: 200,
+      }),
+      Placeholder.configure({ placeholder: 'Enter your message ...' }),
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      TiptapImage.configure({ inline: true }),
+      ImageResize,
+      Table.configure({
+        resizable: true,
+        HTMLAttributes: {
+          class: 'border-collapse table-auto w-full',
+        },
+      }),
+      TableRow.configure({
+        HTMLAttributes: {
+          class: 'border-b dark:border-gray-700',
+        },
+      }),
+      TableHeader.configure({
+        HTMLAttributes: {
+          class: 'border-b dark:border-gray-700',
+        },
+      }),
+      TableCell.configure({
+        HTMLAttributes: {
+          class: 'border border-gray-200 dark:border-gray-700 p-2',
+        },
+      }),
+    ],
+    editorProps: {
+      attributes: {
+        class: 'prose dark:prose-invert max-w-none',
+      },
+    },
 
+    content: '',
+  });
   function onChange(editorState: { read: (arg0: () => void) => void; toJSON: () => any }) {
     editorState.read(() => {
       const root = $getRoot();
@@ -127,79 +269,111 @@ const ChatArea = () => {
   }
 
   return (
-    <div className="flex flex-grow flex-col rounded-l-lg shadow-lg">
-      <div className="flex items-center justify-between rounded-tl-lg border-b bg-white p-4">
-        <div className="flex items-center">
-          <Avatar className="mr-3">
-            <AvatarImage src="/anil-avatar.jpg" alt="Anil" />
-            <AvatarFallback>A</AvatarFallback>
-          </Avatar>
-          <div>
-            <h2 className="font-semibold">Anil</h2>
-            <p className="text-sm text-muted-foreground">Online - Last seen, 2:02pm</p>
-          </div>
-        </div>
-        <div className="flex space-x-2">
-          <Button variant="ghost" size="icon" aria-label="Phone call">
-            <PhoneIcon className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon" aria-label="Video call">
-            <VideoIcon className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon" aria-label="More options">
-            <MoreVerticalIcon className="h-5 w-5" />
-          </Button>
-        </div>
-      </div>
-      <ScrollArea className="flex-grow p-4">
-        <div className="space-y-4">
-          <div className="flex flex-col items-start">
-            <div className="max-w-[70%] rounded-lg bg-secondary p-3">
-              <p>Hey There!</p>
+    <MantineProvider>
+      <div className="flex flex-grow flex-col rounded-l-lg shadow-lg">
+        <div className="flex items-center justify-between rounded-tl-lg border-b bg-white p-4">
+          <div className="flex items-center">
+            <Avatar className="mr-3">
+              <AvatarImage src="/anil-avatar.jpg" alt="Anil" />
+              <AvatarFallback>A</AvatarFallback>
+            </Avatar>
+            <div>
+              <h2 className="font-semibold">Anil</h2>
+              <p className="text-sm text-muted-foreground">Online - Last seen, 2:02pm</p>
             </div>
-            <span className="mt-1 text-xs text-muted-foreground">Today, 8:30pm</span>
           </div>
-          <div className="flex flex-col items-end">
-            <div className="max-w-[70%] rounded-lg bg-primary p-3 text-primary-foreground">
-              <p>Hello!</p>
-            </div>
-            <span className="mt-1 text-xs text-muted-foreground">Today, 8:33pm</span>
-          </div>
-        </div>
-      </ScrollArea>
-      <div className="border-t p-4">
-        <LexicalComposer initialConfig={initialConfig}>
-          <div className="flex items-center space-x-2">
-            {/* <Button variant="ghost" size="icon" aria-label="Attach file">
-              <PaperclipIcon className="h-5 w-5" />
-              </Button> */}
-            <div className="flex-grow">
-              <ToolbarPlugin />
-              <RichTextPlugin
-                contentEditable={
-                  <ContentEditable className="min-h-[40px] w-full rounded-b-md border border-input bg-background px-3 py-2 text-sm ring-offset-background" />
-                }
-                placeholder={<div className="text-muted-foreground">Type your message here...</div>}
-                ErrorBoundary={LexicalErrorBoundary}
-              />
-            </div>
-            <AutoFocusPlugin />
-            <MyOnChangePlugin onChange={onChange} />
-            <HistoryPlugin />
-            <TablePlugin />
-            <Button variant="ghost" size="icon" aria-label="Insert emoji">
-              <SmileIcon className="h-5 w-5" />
+          <div className="flex space-x-2">
+            <Button variant="ghost" size="icon" aria-label="Phone call">
+              <PhoneIcon className="h-5 w-5" />
             </Button>
-            <Button
-              size="icon"
-              className="bg-primary text-primary-foreground"
-              aria-label="Voice message">
-              <MicIcon className="h-5 w-5" />
+            <Button variant="ghost" size="icon" aria-label="Video call">
+              <VideoIcon className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" size="icon" aria-label="More options">
+              <MoreVerticalIcon className="h-5 w-5" />
             </Button>
           </div>
-        </LexicalComposer>
+        </div>
+        <ScrollArea className="flex-grow p-4">
+          <div className="space-y-4">
+            <div className="flex flex-col items-start">
+              <div className="max-w-[70%] rounded-lg bg-secondary p-3">
+                <p>Hey There!</p>
+              </div>
+              <span className="mt-1 text-xs text-muted-foreground">Today, 8:30pm</span>
+            </div>
+            <div className="flex flex-col items-end">
+              <div className="max-w-[70%] rounded-lg bg-primary p-3 text-primary-foreground">
+                <p>Hello!</p>
+              </div>
+              <span className="mt-1 text-xs text-muted-foreground">Today, 8:33pm</span>
+            </div>
+          </div>
+        </ScrollArea>
+        <div className="border-t p-4">
+          <RichTextEditor editor={editor}>
+            {editor && (
+              <BubbleMenu editor={editor}>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.Bold />
+                  <RichTextEditor.Italic />
+                  <RichTextEditor.Link />
+                </RichTextEditor.ControlsGroup>
+              </BubbleMenu>
+            )}
+            <RichTextEditor.Toolbar sticky stickyOffset={60} className="border-b">
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Bold />
+                <RichTextEditor.Italic />
+                <RichTextEditor.Underline />
+                <RichTextEditor.Strikethrough />
+                <RichTextEditor.ClearFormatting />
+                <RichTextEditor.Highlight />
+                <RichTextEditor.Code />
+              </RichTextEditor.ControlsGroup>
+
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.H1 />
+                <RichTextEditor.H2 />
+                <RichTextEditor.H3 />
+                <RichTextEditor.H4 />
+              </RichTextEditor.ControlsGroup>
+
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Blockquote />
+                <RichTextEditor.Hr />
+                <RichTextEditor.BulletList />
+                <RichTextEditor.OrderedList />
+                <RichTextEditor.Subscript />
+                <RichTextEditor.Superscript />
+              </RichTextEditor.ControlsGroup>
+
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Link />
+                <RichTextEditor.Unlink />
+              </RichTextEditor.ControlsGroup>
+
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.AlignLeft />
+                <RichTextEditor.AlignCenter />
+                <RichTextEditor.AlignJustify />
+                <RichTextEditor.AlignRight />
+              </RichTextEditor.ControlsGroup>
+
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Undo />
+                <RichTextEditor.Redo />
+              </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <InsertTableDialog editor={editor} /> <ImageControl editor={editor} />
+              </RichTextEditor.ControlsGroup>
+            </RichTextEditor.Toolbar>
+
+            <RichTextEditor.Content />
+          </RichTextEditor>
+        </div>
       </div>
-    </div>
+    </MantineProvider>
   );
 };
 

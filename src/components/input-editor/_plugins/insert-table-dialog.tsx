@@ -1,22 +1,34 @@
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { INSERT_TABLE_COMMAND } from '@lexical/table';
 import { useState } from 'react';
+import { useEditor, Editor } from '@tiptap/react';
+import Table from '@tiptap/extension-table';
+import TableRow from '@tiptap/extension-table-row';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import { RichTextEditor } from '@mantine/tiptap';
+import { TableIcon } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-interface Props {
+interface InsertTableDialogProps {
+  editor: Editor | null;
   onClose: () => void;
 }
 
-const InsertTableDialog = ({ onClose }: Props) => {
-  const [editor] = useLexicalComposerContext();
+const InsertTableDialog = ({ editor, onClose }: InsertTableDialogProps) => {
   const [rows, setRows] = useState('3');
   const [columns, setColumns] = useState('3');
 
   const onInsert = () => {
-    editor.dispatchCommand(INSERT_TABLE_COMMAND, { rows, columns });
-    onClose();
+    if (editor) {
+      editor
+        .chain()
+        .focus()
+        .insertTable({ rows: parseInt(rows), cols: parseInt(columns), withHeaderRow: true })
+        .run();
+      onClose();
+    }
   };
 
   return (
@@ -24,9 +36,9 @@ const InsertTableDialog = ({ onClose }: Props) => {
       <div className="space-y-2">
         <Label htmlFor="rows">Rows</Label>
         <Input
-          min="1"
           id="rows"
           type="number"
+          min={1}
           value={rows}
           onChange={(e) => setRows(e.target.value)}
         />
@@ -34,9 +46,9 @@ const InsertTableDialog = ({ onClose }: Props) => {
       <div className="space-y-2">
         <Label htmlFor="columns">Columns</Label>
         <Input
-          min="1"
           id="columns"
           type="number"
+          min={1}
           value={columns}
           onChange={(e) => setColumns(e.target.value)}
         />
@@ -51,4 +63,25 @@ const InsertTableDialog = ({ onClose }: Props) => {
   );
 };
 
-export default InsertTableDialog;
+const TableControl = ({ editor }: { editor: Editor | null }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  if (!editor) {
+    return null;
+  }
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
+          <TableIcon className="h-4 w-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80">
+        <InsertTableDialog editor={editor} onClose={() => setIsOpen(false)} />
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+export default TableControl;
