@@ -1,5 +1,5 @@
-import EROUTES from '@app/constants/routes';
 import { Navigate, Outlet, useLoaderData, useLocation } from 'react-router-dom';
+import EROUTES from '@app/constants/routes';
 
 function RootLayout() {
   const { isAuthenticated } = useLoaderData() as { isAuthenticated: boolean };

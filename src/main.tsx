@@ -3,10 +3,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
+import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import router from '@app/router';
-import { Provider } from 'react-redux';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import store from './store';
 
 import './index.css';
@@ -22,9 +23,11 @@ root.render(
     <HelmetProvider context={helmetContext}>
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-          <Toaster richColors />
-          <ReactQueryDevtools initialIsOpen={false} />
+          <TooltipProvider>
+            <RouterProvider router={router} />
+            <Toaster richColors />
+          </TooltipProvider>
+          <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
         </QueryClientProvider>
       </Provider>
     </HelmetProvider>

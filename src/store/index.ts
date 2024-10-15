@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { authSlice } from './slices';
+import { authSlice, chatSlice } from './slices';
 
 export interface IRootState {
   auth: ReturnType<typeof authSlice.reducer>;
+  chat: ReturnType<typeof chatSlice.reducer>;
 }
 
 const store = configureStore<IRootState>({
   reducer: {
     auth: authSlice.reducer,
+    chat: chatSlice.reducer,
   },
 });
 
