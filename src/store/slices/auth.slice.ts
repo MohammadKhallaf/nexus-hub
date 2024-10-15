@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, type Slice } from '@reduxjs/toolkit';
 import { getLocalStorageItem } from '@app/utils/get-local-storage';
 import { IUser } from '@types';
 
-interface IAuth {
+export interface IAuth {
   user: IUser;
   token: string;
 }

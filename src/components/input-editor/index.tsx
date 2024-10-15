@@ -3,10 +3,10 @@ import { RichTextEditor } from '@mantine/tiptap';
 
 import { BubbleMenu, useEditor } from '@tiptap/react';
 import { SendIcon } from 'lucide-react';
-import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { cn } from '@/lib/utils';
+import { useAppDispatch } from '@hooks';
+import { addMessage } from '@actions';
 import extensions from './extensions';
 import InsertTableDialog from './insert-table-dialog';
 
@@ -14,6 +14,7 @@ import '@mantine/core/styles.css';
 import '@mantine/tiptap/styles.css';
 
 const InputEditor = () => {
+  const dispatch = useAppDispatch();
   const editor = useEditor({
     autofocus: true,
 
@@ -51,7 +52,10 @@ const InputEditor = () => {
 
   const onSend = () => {
     if (editor) {
-      editor.chain().focus().insertContent('<br />').run();
+      const messageJson = editor.getJSON();
+      dispatch(addMessage(messageJson));
+
+      editor.commands.clearContent();
     }
   };
 
@@ -121,8 +125,8 @@ const InputEditor = () => {
             <ScrollArea className={'h-16 max-w-full flex-grow'}>
               <RichTextEditor.Content className="flex-grow" />
             </ScrollArea>
-            <Button className="mt-auto p-3">
-              <SendIcon className="h-4 w-4" onClick={onSend} />
+            <Button className="mt-auto p-3" onClick={onSend}>
+              <SendIcon className="h-4 w-4" />
             </Button>
           </div>
         </RichTextEditor>
