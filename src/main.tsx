@@ -27,7 +27,7 @@ root.render(
             <RouterProvider router={router} />
             <Toaster richColors />
           </TooltipProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
+          <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
         </QueryClientProvider>
       </Provider>
     </HelmetProvider>
