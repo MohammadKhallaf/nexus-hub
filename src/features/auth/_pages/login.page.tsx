@@ -47,6 +47,7 @@ const LoginPage: React.FC = () => {
       dispatch(
         setAuth({
           user: {
+            id: data.user.id,
             email: data.user.email,
             firstName: data.user.user_metadata.first_name as string,
             lastName: data.user.user_metadata.lastName as string,
