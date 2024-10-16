@@ -4,6 +4,9 @@
 - [Nexus Hub Chat App](#nexus-hub-chat-app)
   - [Table of Contents](#table-of-contents)
   - [Project Overview](#project-overview)
+  - [Time Allocation](#time-allocation)
+      - [Key Observations and Challenges:](#key-observations-and-challenges)
+  - [Challenges and Solutions](#challenges-and-solutions)
   - [Architecture Flexibility](#architecture-flexibility)
     - [Project Structure](#project-structure)
   - [Key Components and Features (Project Architecture)](#key-components-and-features-project-architecture)
@@ -21,6 +24,101 @@
 ## Project Overview
 A chat application built with React and Supabase, featuring rich text editing, and robust state management.
 
+
+## Time Allocation
+
+This project was completed within a compressed timeframe of approximately 28 total hours, amidst significant work overload and other commitments. The intensity of the development process and the need to quickly adapt to new technologies characterized this project. Here's a breakdown of how time was allocated:
+
+1. Initial Setup and Tool Configuration: 25% (~ 7 hours)
+   - Project structure setup
+   - Installation and configuration of development tools
+   - Environment setup (ESLint, Prettier, TypeScript, etc.)
+   - Initial Supabase project creation and configuration
+
+2. Supabase Investigation and Backend Development: 25% (~ 7 hours)
+   - Deep dive into Supabase capabilities and limitations
+   - API design and implementation using Supabase
+   - Database schema design and setup
+   - Authentication implementation
+
+3. Frontend Development: 18% (~ 5 hours)
+   - UI implementation with React and Tailwind CSS
+   - Component development
+   - State management setup (Redux, React Query)
+
+4. Rich Text Editor Integration: 14% (~ 4 hours)
+   - Initial attempt with Lexical
+   - Transition to and implementation of TipTap
+   - Custom extensions for tables and images
+
+5. Image Handling and File Attachments: 11% (~ 3 hours)
+   - Implementation of image upload to Supabase Storage
+   - Image resizing and manipulation in the editor
+   - Integration with message sending process
+
+6. Documentation and Code Organization: 4% (~ 1.25 hours)
+   - README creation and updates
+   - Code commenting and organization
+   - Quick documentation of key decisions and challenges
+
+7. Real-time Feature Investigation: 2% (~ 0.5 hours)
+   - Preliminary research on Supabase real-time capabilities
+   - Initial implementation attempts
+
+8. Testing and Refinement: 1% (~ 0.25 hours)
+   - Basic manual testing of core features
+   - Critical bug fixes
+
+Total Time: ~28 hours
+
+#### Key Observations and Challenges:
+- The project was completed under significant time pressure and work overload, necessitating rapid decision-making and efficient use of available time.
+- Backend development with Supabase required significant investment, balancing the need to understand the platform deeply with the pressure to produce a functional prototype quickly.
+- Image handling and rich text editor integration were prioritized as core features, essential for the chat application's functionality.
+- Documentation, while limited by time constraints, was given attention to ensure key decisions and challenges were recorded for future reference.
+- The compressed timeframe necessitated a focus on core features, with limited time for extensive testing and real-time feature development.
+- Balancing the need for a functional prototype with the desire for code quality and comprehensive documentation was an ongoing challenge.
+
+
+
+## Challenges and Solutions
+
+During the development process, I encountered and addressed several significant challenges:
+1. Custom Backend Development
+   - **Challenge**: The project required a custom backend solution, necessitating building from scratch.
+   - **Solution**: Leveraged **Supabase** as the backend, providing a flexible foundation for the project's needs. This involved:
+     - Iterative development cycles
+     - Extensive manual testing to ensure proper implementation of all required functionalities
+
+2. Rich Text Editor Integration
+   - **Challenge**: Initially attempted to use **Lexical** (Facebook's rich text editor), which proved difficult to extend for specific project needs.
+   - **Solution**: Transitioned to **TipTap**, offering greater flexibility and customization options. This change enabled more efficient implementation of required rich text features.
+
+3. Complex Element Rendering in Editor
+   - **Challenge**: Displaying and resizing complex elements (tables and images) within the rich text editor while maintaining editability and proper rendering.
+   - **Solution**: Developed custom TipTap extensions for table and image handling. Conducted thorough manual testing to ensure correct display in both creation and viewing modes.
+
+4. File (Image) Attachment Handling
+   - **Challenge**: Implementing a more complex workflow for file attachments compared to simple text messages.
+   - **Solution**: Developed a two-step process:
+     1. Pre-upload files to **Supabase Storage**.
+     2. Attach the resulting URL to the message content JSON.
+   This approach improved message sending efficiency and reduced main database load.
+
+5. Real-time Data Synchronization (Ongoing)
+   - **Challenge**: Ensuring consistent data across multiple clients in real-time, particularly for active chat sessions.
+   - **Current Approach**: 
+     - Investigating Supabase's real-time capabilities
+     - Utilizing `react-query` for refetching when in chat view and at set intervals
+   - **Status**: Ongoing development and optimization, including:
+     - Experimentation with supabase channels configurations
+     - Exploration of optimistic updates and conflict resolution strategies
+   - **Next Steps**:
+     - Conduct thorough multi-user testing to identify synchronization issues
+     - Implement robust error handling and recovery for connection interruptions
+     - Consider fallback polling mechanism for scenarios where real-time updates fail
+
+These challenges necessitated extensive research and adaptive approaches throughout the development process. The iterative nature of the project highlighted the importance of reaching implementation milestones to fully understand and address limitations.
 
 ## Architecture Flexibility
 
