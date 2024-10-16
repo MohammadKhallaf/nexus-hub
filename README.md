@@ -196,7 +196,7 @@ nexus-hub/
 
 3. **Types and Schemas (`src/app/types/` and `src/app/schemas/`)**
    - TypeScript type definitions for API, auth, connections, and messages
-   - Zod schemas for form validation
+   - **Yup** schemas for form validation
 
 4. **UI Components (`src/components/ui/`)**
    - Shadcn components like Avatar, Button, Card, Dropdown Menu, etc.
@@ -273,6 +273,7 @@ This project uses a modern, efficient technology stack:
 - **Shadcn** : UI component library, built on top of Tailwind CSS
 - **TipTap**: Rich Text Editor with extensions
 - **Storybook**: UI docuemtation and visual testing
+- **Yup** : For schema validation and formatting
 - State Management **`redux-toolki`**: For authentication and other global state handling
 - Data Fetching Management **`react-query`**: For network requests optimization and caching
 - Package Manager **`pnpm`**:
