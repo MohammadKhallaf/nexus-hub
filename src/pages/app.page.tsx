@@ -1,4 +1,4 @@
-import ChatArea from '@components/chat-area.component';
+import ChatArea from '@/features/chat/_components/chat-area.component';
 import ContactList from '@components/contact-list.component';
 import Sidebar from '@components/sidebar.component';
 

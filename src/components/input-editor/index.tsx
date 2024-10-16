@@ -1,12 +1,15 @@
 import { MantineProvider } from '@mantine/core';
 import { RichTextEditor } from '@mantine/tiptap';
 
-import { BubbleMenu, useEditor } from '@tiptap/react';
+import { BubbleMenu, useEditor, type JSONContent } from '@tiptap/react';
 import { SendIcon } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useAppDispatch } from '@hooks';
+import { useSendMessage } from '@/features/chat/_hooks';
+import { uploadImageToChat } from '@/features/chat/_services/upload-image.services';
 import { addMessage } from '@actions';
+import { useAppDispatch } from '@hooks';
 import extensions from './extensions';
 import InsertTableDialog from './insert-table-dialog';
 
@@ -15,6 +18,11 @@ import '@mantine/tiptap/styles.css';
 
 const InputEditor = () => {
   const dispatch = useAppDispatch();
+
+  const [attachments, setAttachments] = useState<Record<string, File>>({});
+
+  const { mutate: sendMessage } = useSendMessage((import.meta.env.VITE_CHAT_ID as string) ?? '');
+
   const editor = useEditor({
     autofocus: true,
 
@@ -32,6 +40,7 @@ const InputEditor = () => {
       if (files?.length > 0) {
         const imageUrl = URL.createObjectURL(files[0]);
         editor?.chain().focus().setImage({ src: imageUrl }).run();
+        setAttachments((attachments) => ({ ...attachments, [imageUrl]: files[0] }));
       }
     },
 
@@ -45,16 +54,35 @@ const InputEditor = () => {
       const image = event.clipboardData?.files[0];
       if (image?.type.startsWith('image/')) {
         const imageUrl = URL.createObjectURL(image);
+        setAttachments((attachments) => ({ ...attachments, [imageUrl]: image }));
+
         editor?.chain().focus().setImage({ src: imageUrl }).run();
       }
     },
   });
 
-  const onSend = () => {
+  const onSend = async () => {
     if (editor) {
-      const messageJson = editor.getJSON();
-      dispatch(addMessage(messageJson));
+      editor.commands.focus('end');
 
+      const messageJson = editor.getJSON();
+      // for each image , upload to supabase, and replace image url with public url
+
+      let JSONMessage = JSON.stringify(messageJson);
+
+      //  for each key in the attachments,replace the image url with public url
+
+      for (const key in attachments) {
+        const image = attachments[key];
+
+        const publicUrl = await uploadImageToChat(import.meta.env.VITE_CHAT_ID as string, image);
+        JSONMessage = JSONMessage.replace(key, publicUrl);
+      }
+
+      dispatch(addMessage(messageJson));
+      sendMessage({
+        content: JSON.parse(JSONMessage) as JSONContent,
+      });
       editor.commands.clearContent();
     }
   };
@@ -125,7 +153,13 @@ const InputEditor = () => {
             <ScrollArea className={'h-16 max-w-full flex-grow'}>
               <RichTextEditor.Content className="flex-grow" />
             </ScrollArea>
-            <Button className="mt-auto p-3" onClick={onSend}>
+            <Button
+              className="mt-auto p-3"
+              onClick={() => {
+                onSend().catch((_) => {
+                  // ignore
+                });
+              }}>
               <SendIcon className="h-4 w-4" />
             </Button>
           </div>
