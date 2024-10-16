@@ -8,11 +8,12 @@ export const sendMessage = async (body: IMessageInsert) => {
   const { data, error } = await supabase
     .from('messages')
     .insert([{ ...body, sender_id: auth?.user?.id }])
-    .select();
+    .select()
+    .single<IMessageRow>();
 
   if (error) throw new Error(error.message);
 
-  return data[0] as IMessageRow;
+  return data;
 };
 
 export const listMessages = async (chatId: string) => {
