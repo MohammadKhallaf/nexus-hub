@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { REALTIME_CHANNEL_STATES } from '@supabase/supabase-js';
 import supabase from '@app/configs/supabase';
 import type { IMessageRow } from '@types';
 
@@ -8,7 +9,8 @@ const useSubscribeChat = (chatId: string) => {
   const channel = supabase.channel(`chat-${chatId}`);
 
   useEffect(() => {
-    channel
+    if (channel.state === REALTIME_CHANNEL_STATES.joined) return;
+    const subscription = channel
       .on(
         'postgres_changes',
         {
@@ -18,6 +20,7 @@ const useSubscribeChat = (chatId: string) => {
           filter: `chat_id=eq.${chatId}`,
         },
         (payload: { new: IMessageRow }) => {
+          console.log('Updated');
           queryClient.setQueryData(['message-list', chatId], (data: IMessageRow[] | undefined) => {
             if (!data) return [payload.new];
             return [...data, payload.new];
@@ -27,9 +30,10 @@ const useSubscribeChat = (chatId: string) => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel).catch((error) => {
-        // do nothing
-      });
+      subscription
+        .unsubscribe()
+        .then(() => console.log('unsubscribed'))
+        .catch(console.error);
     };
   }, [chatId]);
 };

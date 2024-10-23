@@ -19,17 +19,15 @@ const helmetContext = {};
 const queryClient = new QueryClient();
 
 root.render(
-  <StrictMode>
-    <HelmetProvider context={helmetContext}>
-      <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <RouterProvider router={router} />
-            <Toaster richColors />
-          </TooltipProvider>
-          <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
-        </QueryClientProvider>
-      </Provider>
-    </HelmetProvider>
-  </StrictMode>
+  <HelmetProvider context={helmetContext}>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <RouterProvider router={router} />
+          <Toaster richColors />
+        </TooltipProvider>
+        <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+      </QueryClientProvider>
+    </Provider>
+  </HelmetProvider>
 );
