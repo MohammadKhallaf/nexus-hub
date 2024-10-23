@@ -25,7 +25,7 @@ export const authSlice: Slice<IAuth | null> = createSlice({
         return action.payload as IAuth;
       }
       localStorage.setItem('user', JSON.stringify({ ...state.user, ...action.payload.user }));
-      localStorage.setItem('token', action.payload.token!);
+      localStorage.setItem('token', JSON.stringify(action.payload.token!));
       return { ...state, ...action.payload };
     },
     clearAuth: () => {
