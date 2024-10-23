@@ -56,10 +56,7 @@ const LoginPage: React.FC = () => {
           token: data.session?.access_token,
         })
       );
-      setTimeout(() => {
-        form.reset();
-        navigate(EROUTES.HOME);
-      }, 3000);
+      navigate(EROUTES.HOME);
     },
     onError: (error) => {
       toast.error(error.message || 'An error occurred during registration');
