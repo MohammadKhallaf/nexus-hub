@@ -56,6 +56,8 @@ const LoginPage: React.FC = () => {
           token: data.session?.access_token,
         })
       );
+      window.location.reload();
+
       navigate(EROUTES.HOME);
     },
     onError: (error) => {
